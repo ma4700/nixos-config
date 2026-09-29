@@ -1,0 +1,17 @@
+map <Escape> nohl
+
+# --- theme ---
+set default-bg "#000000"
+set default-fg "#d0d0d0"
+set highlight-color "rgba(180,150,90,0.35)"
+set highlight-active-color "rgba(200,170,100,0.45)"
+set statusbar-bg "#1a1a1a"
+set statusbar-fg "#d0d0d0"
+set inputbar-bg "#000000"
+set inputbar-fg "#d0d0d0"
+set completion-bg "#000000"
+set completion-fg "#d0d0d0"
+set completion-highlight-bg "#3a3a3a"
+set completion-highlight-fg "#d0d0d0"
+set notification-error-bg "#000000"
+set notification-error-fg "#d0d0d0"

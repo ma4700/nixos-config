@@ -255,7 +255,7 @@ Scope {
                         Text {
                             anchors.centerIn: parent
                             visible: root.buffer.length > 0
-                            text: "•".repeat(Math.min(root.buffer.length, 24))
+                            text: "•".repeat(Math.min(root.buffer.length, 16))
                             color: theme.bright
                             font.family: "JetBrains Mono"
                             font.pixelSize: 18

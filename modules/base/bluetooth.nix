@@ -4,7 +4,8 @@
   flake.nixosModules.bluetooth = { pkgs, ... }: {
     hardware.bluetooth = {
       enable = true;
-      powerOnBoot = true;
+      powerOnBoot = false;
+      settings.Policy.ReconnectAttempts = 0;
     };
   };
 }

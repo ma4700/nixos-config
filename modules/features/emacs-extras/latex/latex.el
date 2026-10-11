@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+; -*- lexical-binding: t; -*-
 
 (add-to-list 'auto-mode-alist '("\\.tex\\'" . LaTeX-mode))
 
@@ -68,6 +68,9 @@
   (setq yas-triggers-in-field t)
   (define-key yas-keymap (kbd "<tab>") #'yas-next-field-or-cdlatex)
   (define-key yas-keymap (kbd "TAB") #'yas-next-field-or-cdlatex))
+;; No autocomplete in latex files
+(add-hook 'LaTeX-mode-hook
+  (lambda () (setq-local corfu-auto nil)))
 ;; -------------------------------------------------
 
 
@@ -84,6 +87,17 @@
 ;; (defun my/insert-problem-set-template ()
 ;;   (interactive)
 ;;   (insert-file-contents "~/.config/emacs/templates/problem-set.tex"))
+
+(defun my/new-lab-report (file)
+  "Create FILE from the short-lab-report template instead of lecture-notes."
+  (interactive
+   (list (read-file-name "Lab report: " nil nil nil "short-lab-report.tex")))
+  (when (or (file-exists-p file) (get-file-buffer file))
+    (user-error "%s already exists" file))
+  (require 'autoinsert)
+  (let ((auto-insert nil))              ; skip lecture-notes for this file only
+    (find-file file))
+  (insert-file-contents "~/.config/emacs/templates/short-lab-report.tex"))
 
 (defun my/yas-try-expanding-auto-snippets ()
   (when (bound-and-true-p yas-minor-mode)

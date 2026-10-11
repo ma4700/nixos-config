@@ -41,6 +41,7 @@
         "emacs/templates/auto".source = ./templates/auto;
         "emacs/templates/lecture-notes.tex".source =
           config.custom.latex.autoInsertTemplate;
+        "emacs/templates/short-lab-report.tex".source = ./templates/short-lab-report.tex;
       };
 
       custom.emacs.extraInit = [ ./latex.el ];

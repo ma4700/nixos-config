@@ -230,6 +230,9 @@
       useRoutingFeatures = "client";
     };
 
+    # Mullvad
+    services.mullvad-vpn.enable = true;
+
     # Enable upower daemon
     services.upower.enable = true;
 

@@ -1,3 +1,6 @@
+> [!NOTE]
+> **AI disclosure:** parts of this repo were written with the help of Claude AI. Everything is reviewed and tested.
+
 ```text
 flake.nix                    inputs, then import-tree ./modules (that's all)
 modules/

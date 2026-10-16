@@ -107,6 +107,11 @@
 
     qt.enable = true;
 
+    # Hyprland, correct scaling
+    home-manager.sharedModules = [{
+      wayland.windowManager.hyprland.settings.monitor = [ "eDP-1,preferred,auto,auto" ];
+    }];
+    
     # Enable touchpad support
     services.libinput.enable = true;
 

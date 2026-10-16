@@ -25,6 +25,7 @@
           dvisvgm
           unicode-math
           hyphen-greek
+          pgf
         ]))
         pkgs.libertinus
       ];

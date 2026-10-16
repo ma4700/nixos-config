@@ -1,22 +1,24 @@
-% short-lab-report.tex — Σύντομη εργαστηριακή αναφορά
+% short-lab-report.tex — Σύντομη αναφορά εργαστηριακής άσκησης
 % Μεταγλώττιση με XeLaTeX (latexmk -xelatex)
 
 \documentclass[11pt,a4paper]{article}
 
 % ==================== Πακέτα ====================
-\usepackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
+\usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage{mathtools}
 \usepackage{physics}
 \usepackage{siunitx}
 \usepackage[version=4]{mhchem}
-\usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{parskip}
-\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,arrows.meta,shapes.geometric}
 
 \usepackage{polyglossia}
 \setmainlanguage{greek}
@@ -30,41 +32,65 @@
 \hypersetup{hidelinks}
 
 \sisetup{
-  uncertainty-mode      = separate,
-  separate-uncertainty-units = repeat,
-  range-phrase          = {\,--\,},
-  range-units           = single,
-  mode                  = match,  % αριθμοί με τη γραμματοσειρά του κειμένου
-  reset-text-series     = false,  % έντονοι μέσα σε έντονο κείμενο
+  output-decimal-marker      = {,},     % ελληνική υποδιαστολή
+  uncertainty-mode           = separate,
+  separate-uncertainty-units = repeat,  % 5,0 mL ± 0,1 mL
+  mode                       = match,   % αριθμοί με τη γραμματοσειρά του κειμένου
+  reset-text-series          = false,   % έντονοι μέσα σε έντονο κείμενο
 }
 \DeclareSIUnit{\molar}{M}
 
 % ==================== Στοιχεία αναφοράς ====================
-\newcommand{\labcourse}{Όνομα μαθήματος}
-\newcommand{\labno}{Άσκηση Χ}
-\newcommand{\labtitle}{Ονομασία πειράματος}
-\newcommand{\labauthors}{Ονοματεπώνυμο}
-\newcommand{\labid}{ΑΜ}
-\newcommand{\labbench}{Χ}
-\newcommand{\labdate}{\today}  % ημερομηνία εκτέλεσης
+\newcommand{\labtitle}{Τίτλος άσκησης}
+\newcommand{\labstudent}{Ονοματεπώνυμο}
+\newcommand{\labseat}{}                 % Α/Α θέσης
+\newcommand{\labdate}{\today}           % ημερομηνία εκτέλεσης
+\newif\iflabfull
+\labfullfalse                           % \labfulltrue αν παραδίδεται πλήρης έκθεση
 
-% ==================== Μορφή σελίδας ====================
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small\labcourse}
-\fancyhead[R]{\small\labtitle}
-\fancyfoot[C]{\small\thepage}
+% ==================== Μορφή ====================
+\pagestyle{plain}
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}%
+  {-2.2ex plus -0.5ex minus -0.2ex}{0.8ex}{\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+  {-1.8ex plus -0.4ex minus -0.2ex}{0.6ex}{\normalfont\normalsize\bfseries}}
+\makeatother
 
-% ==================== Εντολές αναφοράς ====================
-% \labstep{Τίτλος}        νέο αριθμημένο βήμα (Βήμα 1, 2, ...)
-% \labpart{Τίτλος}        υποτίτλος μέσα σε βήμα (Περιγραφή, Μετρήσεις, ...)
+\newcommand{\circled}[1]{%
+  \tikz[baseline=(c.base)]\node[draw,ellipse,inner sep=1.5pt](c){#1};}
+
+% \reaction{...}: αντίδραση σε σύνταξη mhchem, με ▶ μπροστά
+%   (aq), (s): φάση · v: ίζημα (↓) · ^: αέριο (↑)
+\newcommand{\reaction}[1]{%
+  \par\medskip\noindent
+  \tikz[baseline=-0.6ex]\fill (0,-0.5ex) -- (0.9ex,0) -- (0,0.5ex) -- cycle;%
+  \quad\ce{#1}\par\smallskip}
+
+% Διάγραμμα ροής
+%   \fd{...}: φυσική διεργασία (Φ.Δ.)   \xd{...}: χημική διεργασία (Χ.Δ.)
+\newcommand{\fd}[1]{#1\\[-2pt]{\scriptsize Φ.Δ.}}
+\newcommand{\xd}[1]{#1\\[-2pt]{\scriptsize Χ.Δ.}}
+\tikzset{
+  flow/.style = {node distance=6mm and 10mm, font=\small,
+                 >={Stealth[length=2mm]}, every path/.style={->}},
+  box/.style  = {draw, minimum height=12mm, text width=25mm,
+                 align=center, inner sep=2pt},
+  io/.style   = {align=center, inner sep=1pt},
+}
+
+% ==================== Βήματα και συγκρίσεις ====================
+% \labstep{Τίτλος}   νέο αριθμημένο βήμα (Βήμα 1, 2, ...)
+% \labpart{Τίτλος}   υποτίτλος μέσα σε βήμα (Διάγραμμα ροής, Υπολογισμοί, ...)
 % \labcompare[μονάδα]{μέγεθος}{πειραματική}{αναμενόμενη}{προβλεπόμενο σφάλμα %}
 %     υπολογίζει ε = |πειρ. − αναμ.| / |αναμ.| · 100 και το συγκρίνει με το όριο.
 %     Τιμές ως σκέτοι αριθμοί με τελεία (π.χ. 0.0962 ή 9.62e-2), αναμενόμενη ≠ 0.
 %     Απόλυτο σφάλμα δx → όριο σε %: δx / x · 100.
 % \begin{improve} ... \end{improve}
-%     πλαίσιο «Περιθώρια βελτίωσης»· μπαίνει μετά τις συγκρίσεις του βήματος.
-% \labsummary             πίνακας με όλες τις συγκρίσεις της αναφοράς
+%     πλαίσιο «Τι θα μπορούσε να πάει καλύτερα»· μπαίνει μετά τις συγκρίσεις
+%     του βήματος και τονίζεται αν κάποια βγήκε εκτός ορίου.
+% \labsummary        πίνακας με όλες τις συγκρίσεις (τίποτα αν δεν υπάρχουν)
 
 \newcounter{labstep}
 \newcommand{\labstepheading}[1]{\subsection*{Βήμα~\thelabstep: #1}}
@@ -79,24 +105,39 @@
   \par\smallskip\noindent
   \begin{tabular}{@{}l@{\quad}l@{}}
     \multicolumn{2}{@{}l}{\textbf{Σύγκριση: #1}}\\[0.2em]
-    Πειραματική τιμή:     & \labvalue{#3}{#2}\\
-    Αναμενόμενη τιμή:     & \labvalue{#4}{#2}\\
-    Σχετικό σφάλμα:       & $\varepsilon = \labpercent{#5}$
-                            \quad (προβλεπόμενο: $\le \SI{#6}{\percent}$)\\
-    Αξιολόγηση:           & \ifnum#7=1 \textbf{εκτός ορίου}\else εντός ορίου\fi
+    Πειραματική τιμή: & \labvalue{#3}{#2}\\
+    Αναμενόμενη τιμή: & \labvalue{#4}{#2}\\
+    Σχετικό σφάλμα:   & $\varepsilon = \labpercent{#5}$
+                        \quad (προβλεπόμενο: $\le \SI{#6}{\percent}$)\\
+    Αξιολόγηση:       & \ifnum#7=1 \textbf{εκτός ορίου}\else εντός ορίου\fi
   \end{tabular}\par\smallskip}
 
 \newcommand{\labsummaryrow}[8]{%
   #1 & #2 & \labvalue{#4}{#3} & \labvalue{#5}{#3} & \labpercent{#6}
   & \SI{#7}{\percent} & \ifnum#8=1 \textbf{εκτός}\else εντός\fi \\}
 
+\newcommand{\labsummarytable}{%
+  \begin{table}[H]
+    \centering
+    \caption{Σύνοψη συγκρίσεων με τις αναμενόμενες τιμές}
+    \begin{tabular}{c l r r r r l}
+      \toprule
+      Βήμα & Μέγεθος & Πειραματική & Αναμενόμενη & $\varepsilon$ & Όριο & Αξιολόγηση\\
+      \midrule
+      \labsummaryrows
+      \bottomrule
+    \end{tabular}
+  \end{table}}
+
 \ExplSyntaxOn
 \fp_new:N   \l__lab_err_fp
 \bool_new:N \l__lab_out_bool
+\bool_new:N \g__lab_step_out_bool
 \tl_new:N   \g__lab_rows_tl
 
 \NewDocumentCommand \labstep { m }
   {
+    \bool_gset_false:N \g__lab_step_out_bool
     \refstepcounter { labstep }
     \labstepheading {#1}
   }
@@ -105,7 +146,10 @@
   {
     \fp_set:Nn \l__lab_err_fp { abs( (#3) - (#4) ) / abs(#4) * 100 }
     \fp_compare:nNnTF \l__lab_err_fp > {#5}
-      { \bool_set_true:N  \l__lab_out_bool }
+      {
+        \bool_set_true:N  \l__lab_out_bool
+        \bool_gset_true:N \g__lab_step_out_bool
+      }
       { \bool_set_false:N \l__lab_out_bool }
     \use:x
       {
@@ -126,77 +170,96 @@
       }
   }
 
+\NewExpandableDocumentCommand \labifout { +m +m }
+  { \bool_if:NTF \g__lab_step_out_bool {#1} {#2} }
 \NewExpandableDocumentCommand \labsummaryrows { }
   { \g__lab_rows_tl }
+\NewDocumentCommand \labsummary { }
+  { \tl_if_empty:NF \g__lab_rows_tl { \labsummarytable } }
 \ExplSyntaxOff
 
 \NewDocumentEnvironment{improve}{+b}{%
   \par\medskip\noindent
-  \fcolorbox{black!70}{white}{%
+  \begingroup
+  \labifout
+    {\setlength{\fboxrule}{1.2pt}\colorlet{labbg}{black!6}%
+     \def\labboxtitle{Τι θα μπορούσε να πάει καλύτερα --- απόκλιση εκτός ορίου}}
+    {\setlength{\fboxrule}{0.4pt}\colorlet{labbg}{white}%
+     \def\labboxtitle{Τι θα μπορούσε να πάει καλύτερα}}%
+  \fcolorbox{black!70}{labbg}{%
     \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
-      \textbf{Περιθώρια βελτίωσης}\par\smallskip
+      \textbf{\labboxtitle}\par\smallskip
       #1
     \end{minipage}}%
+  \endgroup
   \par\medskip}{}
-
-\newcommand{\labsummary}{%
-  \begin{table}[H]
-    \centering
-    \caption{Σύνοψη συγκρίσεων με τις αναμενόμενες τιμές}
-    \begin{tabular}{c l r r r r l}
-      \toprule
-      Βήμα & Μέγεθος & Πειραματική & Αναμενόμενη & $\varepsilon$ & Όριο & Αξιολόγηση\\
-      \midrule
-      \labsummaryrows
-      \bottomrule
-    \end{tabular}
-  \end{table}}
 
 % ==================== Έγγραφο ====================
 \begin{document}
 
-\thispagestyle{plain}
 \begin{center}
-  {\small ΕΘΝΙΚΟ ΜΕΤΣΟΒΙΟ ΠΟΛΥΤΕΧΝΕΙΟ\\ ΣΧΟΛΗ ΧΗΜΙΚΩΝ ΜΗΧΑΝΙΚΩΝ}\\[1em]
-  {\small\labcourse}\\[0.4em]
-  {\LARGE\bfseries\labtitle}\\[0.4em]
-  {\large\labno}
+  {\small ΕΘΝΙΚΟ ΜΕΤΣΟΒΙΟ ΠΟΛΥΤΕΧΝΕΙΟ · ΣΧΟΛΗ ΧΗΜΙΚΩΝ ΜΗΧΑΝΙΚΩΝ}\\[0.6em]
+  {\Large\bfseries ΣΥΝΤΟΜΗ ΑΝΑΦΟΡΑ ΕΡΓΑΣΤΗΡΙΑΚΗΣ ΑΣΚΗΣΗΣ}
 \end{center}
 
+{\renewcommand{\arraystretch}{1.5}
 \noindent
-\begin{tabular*}{\linewidth}{@{}l@{\extracolsep{\fill}}r@{}}
-  \textbf{Ονοματεπώνυμο:} \labauthors & \textbf{Αριθμός πάγκου:} \labbench\\
-  \textbf{ΑΜ:} \labid                 & \textbf{Ημερομηνία εκτέλεσης:} \labdate
-\end{tabular*}
-\par\medskip\hrule
+\begin{tabularx}{\linewidth}{|>{\small\bfseries}l|X|}
+  \hline
+  ΤΙΤΛΟΣ ΑΣΚΗΣΗΣ           & \labtitle\\ \hline
+  ΟΝΟΜΑΤΕΠΩΝΥΜΟ ΣΠΟΥΔΑΣΤΗ  & \labstudent\\ \hline
+  Α/Α ΘΕΣΗΣ                & \labseat\\ \hline
+  ΗΜΕΡΟΜΗΝΙΑ ΕΚΤΕΛΕΣΗΣ     & \labdate\\ \hline
+  ΠΑΡΑΔΟΣΗ ΠΛΗΡΟΥΣ ΕΚΘΕΣΗΣ &
+    \iflabfull \circled{ΝΑΙ}\quad ΟΧΙ\else ΝΑΙ\quad\circled{ΟΧΙ}\fi\\ \hline
+\end{tabularx}}
 
 % ------------------------------------------------
-\section{Σκοπός της άσκησης}
-% 2--4 προτάσεις: τι προσδιορίζεται, με ποια μέθοδο, ποια αρχή εφαρμόζεται.
-
-
-
-% ------------------------------------------------
-\section{Όργανα και αντιδραστήρια}
-% Γράψε και την ακρίβεια κάθε οργάνου: από αυτήν βγαίνει το προβλεπόμενο σφάλμα.
+\section{ΣΚΟΠΟΣ}
 
 
 
 % ------------------------------------------------
-\section{Διαδικασία και υπολογισμοί}
-% Ανά βήμα: Περιγραφή → Μετρήσεις → Υπολογισμοί → \labcompare → improve.
+\section{ΔΙΑΓΡΑΜΜΑ ΡΟΗΣ -- ΥΠΟΛΟΓΙΣΜΟΙ}
+% Ανά βήμα: \reaction → Διάγραμμα ροής → Υπολογισμοί → \labcompare → improve.
 % Για νέο βήμα αντέγραψε το μπλοκ από \labstep έως \end{improve}.
 
 \labstep{Τίτλος βήματος}
-\label{step:1}
 
-\labpart{Περιγραφή}
+\reaction{A(aq) + B(aq) -> C(s) v + D(aq)}
 
+\labpart{Διάγραμμα ροής}
 
-\labpart{Μετρήσεις}
+\begin{center}
+\begin{tikzpicture}[flow]
+  \node[box]               (d1)  {\fd{Διαλυτοποίηση}};
+  \node[box, below=of d1]  (d2)  {\fd{Διαλυτοποίηση}};
+  \coordinate (m) at ($(d1.east)!0.5!(d2.east)$);
+  \node[box, right=of m]   (rx)  {\xd{Χημική αντίδραση}};
+  \node[box, right=of rx]  (fl)  {\fd{Διήθηση}};
+  \node[box, right=12mm of fl] (dr) {\fd{Ξήρανση}};
 
+  \node[io, left=6mm of d1]  (i1) {\ce{A(s)}\\\ce{H2O}};
+  \node[io, left=6mm of d2]  (i2) {\ce{B(s)}\\\ce{H2O}};
+  \node[io, above=of fl]     (o1) {διήθημα};
+  \node[io, below=of dr]     (o2) {\ce{C(s)}};
+
+  \draw (i1) -- (d1);
+  \draw (i2) -- (d2);
+  \draw (d1.east) -- ++(5mm,0) |- (rx.west);
+  \draw (d2.east) -- ++(5mm,0) |- (rx.west);
+  \draw (rx) -- (fl);
+  \draw (fl) -- node[above, font=\footnotesize] {ίζημα} (dr);
+  \draw (fl) -- (o1);
+  \draw (dr) -- (o2);
+\end{tikzpicture}
+\end{center}
 
 \labpart{Υπολογισμοί}
+% \begin{align*}
+%   x &= ... \\
+%     &= ...
+% \end{align*}
 
 
 % \labcompare[μονάδα]{μέγεθος}{πειραματική}{αναμενόμενη}{όριο %}
@@ -206,10 +269,11 @@
 \end{improve}
 
 % ------------------------------------------------
-\section{Σύνοψη}
+\section{ΣΥΜΠΕΡΑΣΜΑΤΑ}
 % Ο πίνακας γεμίζει αυτόματα από τις εντολές \labcompare.
 
 \labsummary
+
 
 
 \end{document}

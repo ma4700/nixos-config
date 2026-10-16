@@ -5,7 +5,7 @@
       [ (modulesPath + "/installer/scan/not-detected.nix")
       ];
 
-    boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
+    boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
     boot.initrd.kernelModules = [ "i915" ]; # early KMS
     boot.kernelModules = [ "kvm-intel" "tcp_bbr" ];
     boot.extraModulePackages = [ ];

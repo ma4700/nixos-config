@@ -25,7 +25,13 @@
       efiSupport = true;
       device = "nodev";
       copyKernels = true;
-      splashImage = ./grub-background.jpg
+      splashImage = ./grub-background.jpg;
+      # Make grub font larger
+      font = pkgs.runCommand "unifont-32.pf2" { } ''
+        otf=$(find ${pkgs.unifont}/share/fonts -name 'unifont*.otf' ! -name 'unifont_*' | head -n1)
+        ${pkgs.grub2}/bin/grub-mkfont -s 32 -o $out "$otf"
+      '';
+       extraEntries = ''
       configurationLimit = 10;
       extraEntries = ''
         menuentry "Windows" {

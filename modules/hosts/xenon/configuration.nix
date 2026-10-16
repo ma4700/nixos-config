@@ -27,10 +27,10 @@
       copyKernels = true;
       splashImage = ./grub-background.jpg;
       # Make grub font larger
-      font = pkgs.runCommand "unifont-32.pf2" { } ''
-        otf=$(find ${pkgs.unifont}/share/fonts -name 'unifont*.otf' ! -name 'unifont_*' | head -n1)
-        ${pkgs.grub2}/bin/grub-mkfont -s 32 -o $out "$otf"
-      '';
+      font = "${pkgs.runCommand "unifont-32.pf2" { } ''
+         otf=$(find ${pkgs.unifont}/share/fonts -name 'unifont*.otf' ! -name 'unifont_*' | head -n1)
+         ${pkgs.grub2}/bin/grub-mkfont -s 32 -o $out "$otf"
+      ''}";
       configurationLimit = 10;
       extraEntries = ''
         menuentry "Windows" {
@@ -113,6 +113,7 @@
     # Hyprland, correct scaling
     home-manager.sharedModules = [{
       wayland.windowManager.hyprland.settings.monitor = [ "eDP-1,preferred,auto,auto" ];
+      wayland.windowManager.hyprland.settings.env = [ "QT_SCALE_FACTOR,0.9" ];
     }];
     
     # Enable touchpad support
@@ -195,13 +196,6 @@
 
     # Enable upower daemon
     services.upower.enable = true;
-
-    # Hide login banner on TTY << Welcome to NixOS ... >>
-    services.getty = {
-      greetingLine = lib.mkForce "[ \\l ]";
-      helpLine = lib.mkForce "";
-      extraArgs = [ "--nohostname" ];
-    };
 
     # PlatformIO board flashing without sudo
     services.udev.packages = [ pkgs.platformio-core.udev ];

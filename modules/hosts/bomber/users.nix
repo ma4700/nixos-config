@@ -10,6 +10,8 @@
       hashedPasswordFile = "/persist/passwords/alice";
     };
 
+    services.tailscale.extraSetFlags = [ "--operator=alice" ];
+    
     environment.persistence."/persist".users.alice.directories = [
       "dots"
       "Documents"

@@ -31,7 +31,6 @@
         otf=$(find ${pkgs.unifont}/share/fonts -name 'unifont*.otf' ! -name 'unifont_*' | head -n1)
         ${pkgs.grub2}/bin/grub-mkfont -s 32 -o $out "$otf"
       '';
-       extraEntries = ''
       configurationLimit = 10;
       extraEntries = ''
         menuentry "Windows" {

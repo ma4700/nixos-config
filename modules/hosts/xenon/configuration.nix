@@ -13,7 +13,6 @@
         self.nixosModules.xenonUsers
         self.nixosModules.hyprland
         self.nixosModules.nmtui-theme
-        self.nixosModules.grub-theme
         self.nixosModules.audio
       ] ++ lib.optional self.bluetoothEnabled self.nixosModules.bluetooth;
 
@@ -26,6 +25,7 @@
       efiSupport = true;
       device = "nodev";
       copyKernels = true;
+      splashImage = ./grub-background.jpg
       configurationLimit = 10;
       extraEntries = ''
         menuentry "Windows" {
@@ -41,8 +41,6 @@
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot";
     };
-
-    boot.kernelParams = [ "systemd.show_status=error" ];
 
     # Default kernel, not linuxPackages_latest, because the NVIDIA modules lag behind it
 

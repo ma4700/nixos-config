@@ -192,7 +192,6 @@
     # Enable tailscale
     services.tailscale = {
       enable = true;
-      openFirewall = true; # Opens UDP 41641 for direct connections, if closed everything is relayed through tailscale's DERP servers
       useRoutingFeatures = "client";
     };
 

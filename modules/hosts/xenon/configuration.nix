@@ -37,6 +37,9 @@
           insmod part_gpt
           insmod fat
           insmod chain
+          # remove the background so Windows starts on a plain black screen
+          background_image
+          clear
           search --no-floppy --file --set=root /EFI/Microsoft/Boot/bootmgfw.efi
           chainloader /EFI/Microsoft/Boot/bootmgfw.efi
         }
@@ -153,9 +156,11 @@
       lynis
       v4l-utils
       mpv
+      imv
       libnotify
       strace
       alsa-utils
+      gnupg
     ];
 
     # Install fonts

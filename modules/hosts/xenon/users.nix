@@ -20,6 +20,7 @@
       ".cache/noctalia"
       ".config/mozilla"
       ".local/share/direnv" # direnv's allow list
+      ".gnupg"
     ];
 
     home-manager.users.alice = {

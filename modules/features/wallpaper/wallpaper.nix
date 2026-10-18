@@ -1,3 +1,3 @@
 {
-  flake.wallpaper = ./gruvbox-mountain-village.png;
+  flake.wallpaper = ./current.png;
 }

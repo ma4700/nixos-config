@@ -15,6 +15,8 @@
     environment.persistence."/persist".users.alice.directories = [
       "dots"
       "Documents"
+      "Music"
+      "Pictures"
       ".config/emacs/var" # no-littering
       ".config/noctalia"
       ".cache/noctalia"
@@ -30,6 +32,7 @@
         self.homeManagerModules.git
         self.homeManagerModules.hyprland
         self.homeManagerModules.niri
+        self.homeManagerModules.kew
       ] ++ (with self.homeManagerModules.emacs-extras; [
         latex
         devel

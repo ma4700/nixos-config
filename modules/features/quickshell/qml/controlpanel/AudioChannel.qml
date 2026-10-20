@@ -1,8 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Pipewire
+import qs
 
-// Audio section (output or input), volume slider / mute button
+// Output or input: mute button, volume slider, other devices to switch to
 ColumnLayout {
     id: root
     spacing: 6
@@ -82,6 +83,8 @@ ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: -4
                 cursorShape: Qt.PointingHandCursor
+                // the panel scrolls when it doesn't fit; keep the drag on the slider
+                preventStealing: true
                 onPressed: mouse => root.dragSet(mouse.x)
                 onPositionChanged: mouse => { if (pressed) root.dragSet(mouse.x) }
             }

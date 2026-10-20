@@ -3,6 +3,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
+import qs.controlpanel
 
 // workspaces, window title, notification badge, clock
 PanelWindow {
@@ -26,11 +27,6 @@ PanelWindow {
         anchors.leftMargin: 14
         anchors.rightMargin: 14
         spacing: 16
-
-        Component {
-            id: bluetoothIcon
-            Bluetooth { }
-        }        
 
         // workspaces
         RowLayout {
@@ -103,24 +99,14 @@ PanelWindow {
             }
         }
 
-	// network + bluetooth
-	RowLayout {
-	    spacing: 3
-	    Network { }
-	    Loader {
-	        active: BluetoothFeature.enabled
-	        sourceComponent: bluetoothIcon
-	    }
-	}        
+        // network, bluetooth, audio, cpu/ram
+        ControlPanel { }
 
-	// audio
-	Audio { }
+        // keyboard layout
+        KeyboardLayout { }
 
-	// keyboard layout
-	KeyboardLayout { }
-
-	// cpu, gpu, battery
-	Vitals { }
+        // battery, hidden when there is none
+        Battery { }
 
         // notification count, click to toggle the center - rightmost item in the bar
         Item {

@@ -1,10 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
+import qs
 
-
-// A row in bluetooth device list
-// Refernced by Bluetooth.qml
-
+// One device in BluetoothCard's lists: name, connect/pair/disconnect,
+// and for known devices an info toggle with address, battery, trusted, unpair
 ColumnLayout {
     id: root
     spacing: 2
